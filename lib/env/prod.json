@@ -1,0 +1,4 @@
+{
+  "env": "PROD",
+  "production": true
+}

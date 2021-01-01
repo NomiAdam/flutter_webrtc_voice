@@ -1,0 +1,48 @@
+name: flutter_webrtc_voice
+description: A new Flutter project bootstrabep by cg_starter.
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_i18n: 0.20.0
+  equatable: 1.2.5
+  flutter_conditional_rendering: 1.1.1
+  flutter_bloc: 6.0.6
+  device_info: 0.4.2+9
+  device_preview: 0.4.8
+  json_annotation: 3.1.0
+  dart_extensions: 1.0.2
+  simple_animations: 2.3.1
+  flutter_screenutil: 3.1.1
+  dartx: 0.5.0
+  shimmer: 1.1.2
+  gap: 1.2.0
+  fluttertoast: 7.1.5
+  connectycube_sdk: ^1.0.0
+  lognito:
+    git:
+      url: https://github.com/Code-Growers/lognito
+      ref: main
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: 1.10.3
+  json_serializable: 3.5.0
+  cg_analysis:
+    git:
+      url: https://github.com/NomiAdam/cg_analysis.git
+      ref: master
+
+flutter:
+  uses-material-design: true
+  assets:
+    - lib/env/
+    - i18n/en/
