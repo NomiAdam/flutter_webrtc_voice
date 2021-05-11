@@ -1,4 +1,4 @@
-package com.example.cg_starter
+package com.example.flutter_webrtc_voice
 
 import io.flutter.embedding.android.FlutterActivity
 

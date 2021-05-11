@@ -1,4 +1,5 @@
 import 'package:connectycube_sdk/connectycube_core.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_webrtc_voice/bloc/app_bloc/app_bloc.dart';
 import 'package:flutter_webrtc_voice/bloc/app_bloc/app_event.dart';
 import 'package:flutter_webrtc_voice/bloc/app_bloc/app_state.dart';
@@ -6,8 +7,6 @@ import 'package:flutter_webrtc_voice/bloc/simple_bloc_observer.dart';
 import 'package:flutter_webrtc_voice/constants/configs.dart' as config;
 import 'package:flutter_webrtc_voice/constants/routes.dart';
 import 'package:flutter_webrtc_voice/theme/theme_data.dart';
-import 'package:device_info/device_info.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,19 +15,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_i18n/loaders/namespace_file_translation_loader.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
-Future<bool> isIpad() async {
-  try {
-    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    final IosDeviceInfo info = await deviceInfo.iosInfo;
-    if (info.model.toLowerCase().contains('ipad')) {
-      return true;
-    }
-    return false;
-  } catch (_) {
-    return false;
-  }
-}
 
 Future<void> main() async {
   final FlutterI18nDelegate flutterI18nDelegate = FlutterI18nDelegate(
@@ -49,10 +35,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(BlocProvider<AppBloc>(
     create: (BuildContext context) => AppBloc()..add(AppInitEvent()),
-    child: DevicePreview(
-      enabled: !kReleaseMode && await isIpad(),
-      builder: (BuildContext context) => App(flutterI18nDelegate),
-    ),
+    child: App(flutterI18nDelegate),
   ));
 }
 
@@ -92,31 +75,33 @@ class _AppState extends State<App> {
         services.DeviceOrientation.portraitDown,
       ]);
     }
-    return MaterialApp(
-      locale: DevicePreview.of(context).locale,
-      localizationsDelegates: <LocalizationsDelegate<dynamic>>[
-        widget.flutterI18nDelegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
-      ],
-      builder: (BuildContext context, Widget child) {
-        return BlocBuilder<AppBloc, AppState>(
-          builder: (BuildContext context, AppState appState) {
-            if (appState is AppInitializedState) {
-              return DevicePreview.appBuilder(context, child);
-            } else if (appState is AppUninitializedState) {
-              return SizedBox.shrink();
-            } else {
-              return SizedBox.shrink();
-            }
-          },
-        );
-      },
-      title: 'CodeGrowers',
-      theme: mainTheme,
-      initialRoute: describeEnum(Routes.login),
-      navigatorKey: appNavigatorKey,
-      routes: routes,
+    return ScreenUtilInit(
+      designSize: Size(360, 640),
+      builder: () => MaterialApp(
+        localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+          widget.flutterI18nDelegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate
+        ],
+        builder: (BuildContext context, Widget child) {
+          return BlocBuilder<AppBloc, AppState>(
+            builder: (BuildContext context, AppState appState) {
+              if (appState is AppInitializedState) {
+                return child;
+              } else if (appState is AppUninitializedState) {
+                return SizedBox.shrink();
+              } else {
+                return SizedBox.shrink();
+              }
+            },
+          );
+        },
+        title: 'CodeGrowers',
+        theme: mainTheme,
+        initialRoute: describeEnum(Routes.login),
+        navigatorKey: appNavigatorKey,
+        routes: routes,
+      ),
     );
   }
 }

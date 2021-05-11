@@ -1,5 +1,5 @@
-import 'package:flutter_webrtc_voice/utils/logger_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_webrtc_voice/utils/logger_utils.dart';
 
 class SimpleBlocObserver extends BlocObserver {
   @override
@@ -16,8 +16,8 @@ class SimpleBlocObserver extends BlocObserver {
   }
 
   @override
-  void onError(Cubit<dynamic> cubit, Object error, StackTrace stacktrace) {
-    super.onError(cubit, error, stacktrace);
-    logger.e(error);
+  void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
+    super.onError(bloc, error, stackTrace);
+    logger.d(stackTrace);
   }
 }
